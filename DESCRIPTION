@@ -1,9 +1,9 @@
-Package: tjsp
-Version: 0.9.0.9070
-Date: 2021-08-24
-Title: Coleta e organização de dados do Tribunal de Justiça de São Paulo
+Package: tjsc
+Version: 0.0.0.9000
+Date: 2021-08-31
+Title: Coleta e organização de dados do Tribunal de Justiça de Santa Catarina
 Description: Funções para baixar metadados das decisõeses judiciais, baixar as
-    decisões mesmas de primeira e de segunda instância do TJSP e organizar esses
+    decisões mesmas de primeira e de segunda instância do TJSC e organizar esses
     dados.
 Authors@R: person("José", "de Jesus Filho", email = "jose@consudata.com.br", role = c("aut", "cre"))
 Maintainer: The package maintainer <jose@consudata.com.br>
@@ -37,8 +37,8 @@ Imports:
     vctrs,
     re2
 RoxygenNote: 7.1.1
-URL: https://github.com/jjesusfilho/tjsp
-BugReports: https://github.com/jjesusfilho/tjsp/issues
+URL: https://github.com/jjesusfilho/tjsc
+BugReports: https://github.com/jjesusfilho/tjsc/issues
 Suggests: 
     roxygen2,
     knitr,
