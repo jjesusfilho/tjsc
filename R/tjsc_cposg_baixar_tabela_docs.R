@@ -6,7 +6,7 @@
 #' @return html
 #' @export
 #'
-tjsp_cposg_baixar_tabela_docs <- function(processos, diretorio = "."){
+tjsc_cposg_baixar_tabela_docs <- function(processos, diretorio = "."){
 
 
 
@@ -16,7 +16,7 @@ tjsp_cposg_baixar_tabela_docs <- function(processos, diretorio = "."){
     stringr::str_pad(width = 20, "left", "0") %>%
     abjutils::build_id()
 
-  uri1 <- "https://esaj.tjsp.jus.br/cposg/search.do?"
+  uri1 <- "https://esaj.tjsc.jus.br/cposg/search.do?"
 
   pb <- progress::progress_bar$new(total = length(processos))
 
@@ -24,7 +24,7 @@ tjsp_cposg_baixar_tabela_docs <- function(processos, diretorio = "."){
 
     pb$tick()
 
-    r<-  httr::GET("https://esaj.tjsp.jus.br/cposg/open.do?gateway=true")
+    r<-  httr::GET("https://esaj.tjsc.jus.br/cposg/open.do?gateway=true")
 
     p <- .x
 
@@ -49,7 +49,7 @@ tjsp_cposg_baixar_tabela_docs <- function(processos, diretorio = "."){
     if (xml2::xml_find_first(conteudo1, "boolean(//div[@id='listagemDeProcessos'])")) {
       conteudo1 <- xml2::xml_find_all(conteudo1, "//a[@class='linkProcesso']") %>%
         xml2::xml_attr("href") %>%
-        xml2::url_absolute("https://esaj.tjsp.jus.br") %>%
+        xml2::url_absolute("https://esaj.tjsc.jus.br") %>%
         purrr::map(~ httr::RETRY("GET", .x, httr::timeout(2)) %>%
                      httr::content())
     } else {
@@ -67,7 +67,7 @@ tjsp_cposg_baixar_tabela_docs <- function(processos, diretorio = "."){
 
       arquivo <- file.path(diretorio,paste0("tabela_cposg_docs_processo_",stringr::str_remove_all(p,"\\D"),".html"))
 
-      url1  <- paste0("https://esaj.tjsp.jus.br/cposg/verificarAcessoPastaDigital.do?cdProcesso=",cdProcesso,"&conversationId=&_=1599440192646")
+      url1  <- paste0("https://esaj.tjsc.jus.br/cposg/verificarAcessoPastaDigital.do?cdProcesso=",cdProcesso,"&conversationId=&_=1599440192646")
 
       url2 <- httr::GET(url1) %>%
         httr::content("text")
@@ -82,10 +82,6 @@ tjsp_cposg_baixar_tabela_docs <- function(processos, diretorio = "."){
 
   }
 
-
-#' @rdname tjsp_cposg_baixar_tabela_docs
-#' @export
-tjsp_baixar_tabela_docs <- tjsp_cposg_baixar_tabela_docs
 
 
 

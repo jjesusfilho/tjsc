@@ -1,4 +1,4 @@
-#' Ajustar os assuntos com base na tabela do TJSP
+#' Ajustar os assuntos com base na tabela do TJSC
 #'
 #' @param df tibble obtido a partir da função organiza_dados_cpopg
 #' @param excluir_cartas default para TRUE. Excluir cartas de ordem e pracatórias.
@@ -7,7 +7,7 @@
 #' @return mesmo df com assuntos ajustados e áreas e  subáreas acrescidas.
 #' @export
 #'
-ajustar_assuntos <- function(df, excluir_cartas = TRUE) {
+tjsc_ajustar_assuntos <- function(df, excluir_cartas = TRUE) {
   suppressWarnings({
     df %>%
       dplyr::select(assunto) %>%

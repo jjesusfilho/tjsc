@@ -1,4 +1,4 @@
-#' Baixa consulta jurisprudencial do TJSP
+#' Baixa consulta jurisprudencial do TJSC
 #'
 #' @param livre palavra ou texto a ser buscado nas ementas e nos acórdãos
 #' @param aspas lógico. Colocar a expressão entre aspas?
@@ -19,10 +19,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' tjsp_baixar_cjsg(livre = "Lei Maria da Penha")
+#' tjsc_baixar_cjsg(livre = "Lei Maria da Penha")
 #' }
 #'
-tjsp_baixar_cjsg <-
+tjsc_baixar_cjsg <-
   function(livre = "",
              aspas = FALSE,
              classe = "",
@@ -35,10 +35,10 @@ tjsp_baixar_cjsg <-
              tipo = "A",
              n = NULL,
              diretorio = ".") {
-     httr::set_config(httr::config(
-      ssl_verifypeer = FALSE,
-      accept_encoding = "latin1"
-    ))
+
+
+    httr::set_config(httr::config(
+      ssl_verifypeer = FALSE    ))
 
     if (aspas == TRUE) livre <- deparse(livre)
 
@@ -85,7 +85,7 @@ tjsp_baixar_cjsg <-
 
     a <-
       httr::POST(
-        "https://esaj.tjsp.jus.br/cjsg/resultadoCompleta.do",
+        "https://esaj.tjsc.jus.br/cjsg/resultadoCompleta.do",
         encode = "form",
         body = body,
         httr::accept("text/html; charset=latin1;")
@@ -130,7 +130,7 @@ tjsp_baixar_cjsg <-
       Sys.sleep(1)
         httr::GET(
           paste0(
-            "https://esaj.tjsp.jus.br/cjsg/trocaDePagina.do?tipoDeDecisao=A&pagina=",
+            "https://esaj.tjsc.jus.br/cjsg/trocaDePagina.do?tipoDeDecisao=A&pagina=",
             .x
           ),
           httr::set_cookies(unlist(a$cookies)),
@@ -149,7 +149,7 @@ tjsp_baixar_cjsg <-
 
         httr::GET(
           paste0(
-            "https://esaj.tjsp.jus.br/cjsg/trocaDePagina.do?tipoDeDecisao=D&pagina=",
+            "https://esaj.tjsc.jus.br/cjsg/trocaDePagina.do?tipoDeDecisao=D&pagina=",
             .x
           ),
           httr::set_cookies(unlist(a$cookies)),
@@ -162,7 +162,3 @@ tjsp_baixar_cjsg <-
     }
   }
 
-
-#' @rdname tjsp_baixar_cjsg
-#' @export
-baixar_cjsg <- tjsp_baixar_cjsg

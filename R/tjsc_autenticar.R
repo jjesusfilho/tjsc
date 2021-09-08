@@ -1,4 +1,4 @@
-#' Autenticar no tjsp
+#' Autenticar no tjsc
 #'
 #' @param login cpf
 #' @param password senha
@@ -9,7 +9,7 @@
 #'      criar variáveis de ambiente: "LOGINADV" e "PASSWORDADV", ou
 #'      chamar a função e aguardar o prompt para informar
 #'      login e password
-autenticar <- function(login = NULL, password = NULL) {
+tjsc_autenticar <- function(login = NULL, password = NULL) {
 
   # Check if isn't already logged in
   if (check_login()) {
@@ -31,7 +31,7 @@ autenticar <- function(login = NULL, password = NULL) {
     }
 
   # Initial access
-  base <- "https://esaj.tjsp.jus.br/"
+  base <- "https://esaj.tjsc.jus.br/"
   httr::GET(stringr::str_c(base, "esaj/portal.do?servico=740000"), httr::config(ssl_verifypeer = FALSE))
 
   # Get login page file
@@ -93,7 +93,7 @@ autenticar <- function(login = NULL, password = NULL) {
 }
 
 check_login <- function() {
-  "https://esaj.tjsp.jus.br/" %>%
+  "https://esaj.tjsc.jus.br/" %>%
     stringr::str_c("sajcas/verificarLogin.js") %>%
     httr::GET(httr::config(ssl_verifypeer = FALSE)) %>%
     httr::content("text") %>%

@@ -1,22 +1,23 @@
-#' Baixa tabela de documentos dos processos do TJSP
+#' Baixar consulta processual de primeiro grau
 #'
-#' @param processos Número do processo
-#' @param diretorio Diretório onde armazenar as tabelas
+#' @param processos Número do processo (cnj)
+#' @param diretorio Diretório onde serão armazenados os htmls
 #'
-#' @return html
+#' @return html com dados processuais
 #' @export
 #'
-tjsp_cpopg_baixar_tabela_docs <- function (processos = NULL, diretorio = ".")
+tjsc_baixar_cpopg <- function (processos = NULL, diretorio = ".")
 {
   httr::set_config(httr::config(ssl_verifypeer = FALSE))
   processos <- stringr::str_remove_all(processos, "\\D+") %>%
-    stringr::str_pad(width = 20, "left", "0") %>% abjutils::build_id()
+    stringr::str_pad(width = 20, "left", "0") %>%
+    pontuar_cnj()
 
-  uri1 <- "https://esaj.tjsp.jus.br/cpopg/search.do?gateway=true"
+  uri1 <- "https://esaj.tjsc.jus.br/cpopg/search.do?gateway=true"
 
   pb <- progress::progress_bar$new(total = length(processos))
 
-  purrr::walk(processos, purrr::possibly(~{
+  purrr::map_dfr(processos, purrr::possibly(~{
 
     pb$tick()
 
@@ -34,26 +35,16 @@ tjsp_cpopg_baixar_tabela_docs <- function (processos = NULL, diretorio = ".")
 
     if (xml2::xml_find_first(conteudo1, "boolean(//div[@id='listagemDeProcessos'])")) {
       conteudo1 <- xml2::xml_find_all(conteudo1, "//a[@class='linkProcesso']") %>%
-        xml2::xml_attr("href") %>% xml2::url_absolute("https://esaj.tjsp.jus.br") %>%
+        xml2::xml_attr("href") %>% xml2::url_absolute("https://esaj.tjsc.jus.br") %>%
         purrr::map(~httr::RETRY("GET", .x, httr::timeout(2)) %>%
                      httr::content())
-    } else {
-      conteudo1 <- list(conteudo1)
     }
-    purrr::walk(conteudo1,purrr::possibly(~{
+    else
+      conteudo1 <- list(conteudo1)
 
-      arquivo <- file.path(diretorio,paste0("tabela_cpopg_docs_processo_",stringr::str_remove_all(p,"\\D"),".html"))
-
-
-      url1 <- .x %>%
-        xml2::xml_find_first("//a[@id='linkPasta']") %>%
-        xml2::xml_attr("href") %>%
-        paste0("https://esaj.tjsp.jus.br",.)
-
-
-      httr::GET(url1,httr::write_disk(arquivo,overwrite = TRUE))
-
-
-    },NULL))
+    p <- stringr::str_remove_all(p, "\\D+")
+    arquivo <- file.path(diretorio, paste0(format(Sys.Date(),
+                                                  "%Y_%m_%d_"), p, ".html"))
+    xml2::write_html(conteudo1[[1]], arquivo)
   }, NULL))
 }
